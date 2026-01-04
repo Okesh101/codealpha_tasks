@@ -72,7 +72,7 @@ BankingSystem.exe
 
 ## Available Operations
 | Option | Action |
----
+| --- | --- |
 | 1	     | Create Account |
 | 2	     | View Balance |
 | 3	     | Deposit Money |
