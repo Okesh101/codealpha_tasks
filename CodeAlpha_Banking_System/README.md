@@ -127,7 +127,7 @@ Amount
 
 Account balance after transaction
 
-Transactions are stored per account, allowing accurate history retrieval.
+*Transactions are stored per account, allowing accurate history retrieval.*
 
 ---
 
@@ -164,3 +164,4 @@ Transaction filtering (date / type)
 
 **Goodluck** <br>
 *C++ Developer & Systems Programming Enthusiast*
+*An Intern at CodeAlpha*
