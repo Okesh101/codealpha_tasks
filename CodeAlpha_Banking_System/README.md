@@ -36,7 +36,7 @@ This project simulates basic banking operations and is suitable for **learning, 
 └── README.md
  -->
 
-<!-- --- -->
+---
 
 ## 🛠 Technologies Used
 
@@ -49,24 +49,33 @@ This project simulates basic banking operations and is suitable for **learning, 
 
 ## ⚙️ Build & Run Instructions
 
-### 1️⃣ Clone the Repository
+#### Clone the Repository
 ```bash
 git clone https://github.com/Okesh101/codealpha_tasks.git
 cd codealpha_tasks
 cd CodeAlpha_Banking_System
+```
 
-# Create Build Directory
+### Create Build Directory
+```bash
 mkdir build
 cd build
+```
 
-# Build with CMake
+### Build with CMake
+```bash
 cmake ..
 cmake --build .
+```
 
-# Run the Program
+### Run the Program 
+#### On Linux
+```bash
 ./BankingSystem
+```
 
-# On Windows
+#### On Windows
+```bash
 BankingSystem.exe
 ```
 
