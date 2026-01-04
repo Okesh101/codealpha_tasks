@@ -163,5 +163,5 @@ Transaction filtering (date / type)
 ## 👤 Author
 
 **Goodluck** <br>
-*C++ Developer & Systems Programming Enthusiast*
+*C++ Developer & Systems Programming Enthusiast* <br>
 *An Intern at CodeAlpha*
