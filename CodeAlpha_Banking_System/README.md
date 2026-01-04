@@ -26,17 +26,17 @@ This project simulates basic banking operations and is suitable for **learning, 
 ✔ Robust input validation  
 ✔ Timestamped transactions  
 
----
+<!-- --- -->
 
-## 🧱 Project Structure
+<!-- ## 🧱 Project Structure
 
 .
 ├── main.cpp
 ├── CMakeLists.txt
 └── README.md
+ -->
 
-
----
+<!-- --- -->
 
 ## 🛠 Technologies Used
 
@@ -51,8 +51,9 @@ This project simulates basic banking operations and is suitable for **learning, 
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/Okesh101/console-banking-system.git
-cd console-banking-system
+git clone https://github.com/Okesh101/codealpha_tasks.git
+cd codealpha_tasks
+cd CodeAlpha_Banking_System
 
 # Create Build Directory
 mkdir build
@@ -70,15 +71,16 @@ BankingSystem.exe
 ```
 
 ## Available Operations
-Option	Action
-1	    Create Account
-2	    View Balance
-3	    Deposit Money
-4	    Withdraw Money
-5	    Funds Transfer
-6	    View Customer Info
-7	    Print Transaction History
-8	    Exit
+| Option | Action |
+---
+| 1	     | Create Account |
+| 2	     | View Balance |
+| 3	     | Deposit Money |
+| 4	     | Withdraw Money |
+| 5	     | Funds Transfer |
+| 6	     | View Customer Info |
+| 7	     | Print Transaction History |
+| 8	     | Exit |
 
 ## 🧠 Design Overview
 **Core Structures**

@@ -1,3 +1,0 @@
-/home/okesh/Documents/Projects/codealpha_tasks/build/CMakeFiles/BankingSystem.dir
-/home/okesh/Documents/Projects/codealpha_tasks/build/CMakeFiles/edit_cache.dir
-/home/okesh/Documents/Projects/codealpha_tasks/build/CMakeFiles/rebuild_cache.dir
