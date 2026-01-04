@@ -1,7 +1,7 @@
 /.vscode
-.vscode/
+**/.vscode/
 .git/
-build/
+**/build/
 dist/
 
 
