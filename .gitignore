@@ -1,5 +1,7 @@
 /.vscode
-.git
-/build
-/dist
+.vscode/
+.git/
+build/
+dist/
+
 
