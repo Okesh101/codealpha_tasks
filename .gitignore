@@ -1,4 +1,6 @@
-/.vscode
+CodeAlpha_Banking_System/.vscode/
+CodeAlpha_Banking_System/build/
+CodeAlpha_CGPA_Calculator/.vscode/
 **/.vscode/
 .git/
 **/build/
