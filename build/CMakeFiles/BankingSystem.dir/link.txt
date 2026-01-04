@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/BankingSystem.dir/src/main.cc.o -o BankingSystem 

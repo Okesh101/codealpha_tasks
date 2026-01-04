@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/okesh/Documents/Projects/codealpha_tasks/build",
+  "command": "/usr/bin/g++   -g -std=c++17 -o CMakeFiles/BankingSystem.dir/src/main.cc.o -c /home/okesh/Documents/Projects/codealpha_tasks/CodeAlpha_Banking_System/src/main.cc",
+  "file": "/home/okesh/Documents/Projects/codealpha_tasks/CodeAlpha_Banking_System/src/main.cc",
+  "output": "CMakeFiles/BankingSystem.dir/src/main.cc.o"
+}
+]
