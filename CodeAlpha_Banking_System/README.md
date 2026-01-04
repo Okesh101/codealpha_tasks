@@ -140,5 +140,5 @@ Transaction filtering (date / type)
 
 ## 👤 Author
 
-Goodluck
-C++ Developer & Systems Programming Enthusiast
+**Goodluck** <br>
+*C++ Developer & Systems Programming Enthusiast*
