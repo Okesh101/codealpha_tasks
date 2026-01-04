@@ -91,6 +91,8 @@ BankingSystem.exe
 | 7	     | Print Transaction History |
 | 8	     | Exit |
 
+---
+
 ## 🧠 Design Overview
 **Core Structures**
 
@@ -109,6 +111,8 @@ All data is stored in-memory using:
 std::unordered_map<long int, BankAccount> bankDatabase;
 ```
 
+---
+
 ## 🕒 Transaction Tracking
 
 Each transaction stores:
@@ -125,6 +129,9 @@ Account balance after transaction
 
 Transactions are stored per account, allowing accurate history retrieval.
 
+---
+
+
 ## ⚠️ Limitations
 
 Data is not persisted (resets on program exit)
@@ -132,6 +139,9 @@ Data is not persisted (resets on program exit)
 No authentication (PIN / password)
 
 No concurrency support
+
+---
+
 
 ## 🔮 Future Improvements
 
@@ -146,6 +156,9 @@ Admin dashboard
 Unit tests
 
 Transaction filtering (date / type)
+
+---
+
 
 ## 👤 Author
 
