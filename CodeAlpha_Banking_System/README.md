@@ -1,40 +1,37 @@
 # 🏦 Console Banking System (C++)
 
-A simple **console-based banking system** built with **modern C++**, demonstrating core programming concepts such as:
+This project is a **console-based Banking System** developed in **C++** as part of **CodeAlpha – Task 4**.
 
-- Object-Oriented Programming (OOP)
-- STL containers (`vector`, `unordered_map`, `unordered_set`)
-- Input validation
-- Transaction history management
-- Date & time handling
-- Modular program design
-
-This project simulates basic banking operations and is suitable for **learning, practice, and portfolio demonstration**.
+It demonstrates how core banking operations can be implemented using **Object-Oriented Programming (OOP)**, standard C++ libraries, and clean program structure.
 
 ---
 
-## 🚀 Features
+## 📌 Task Objective (CodeAlpha – Task 4)
 
-✔ Create a new bank account  
+The goal of this task was to:
+
+- Design classes for **Customer**, **Account**, and **Transaction**
+- Create and manage customer bank accounts
+- Support **deposits, withdrawals, and fund transfers**
+- Allow users to **view account details and balance**
+- Store and display **transaction history**
+
+✔ All required features have been implemented in this project.
+
+---
+
+## 🚀 Features Implemented
+
+✔ Create new customer accounts  
 ✔ Automatically generate unique account numbers  
-✔ Deposit money  
-✔ Withdraw money  
+✔ Deposit money into an account  
+✔ Withdraw money from an account  
 ✔ Transfer funds between accounts  
-✔ View account balance  
-✔ View customer information  
+✔ View current account balance  
+✔ View customer account details  
 ✔ View complete transaction history  
-✔ Robust input validation  
-✔ Timestamped transactions  
-
-<!-- --- -->
-
-<!-- ## 🧱 Project Structure
-
-.
-├── main.cpp
-├── CMakeLists.txt
-└── README.md
- -->
+✔ Input validation for safe operations  
+✔ Timestamped transaction records  
 
 ---
 
@@ -43,7 +40,7 @@ This project simulates basic banking operations and is suitable for **learning, 
 - **Language:** C++ (C++17)
 - **Build System:** CMake
 - **Compiler:** GCC / Clang
-- **Platform:** Linux / macOS / Windows (with MinGW)
+- **Platform:** Linux / Windows (MinGW)
 
 ---
 
@@ -56,19 +53,15 @@ cd codealpha_tasks
 cd CodeAlpha_Banking_System
 ```
 
-### Create Build Directory
+### Build the Project
 ```bash
 mkdir build
 cd build
-```
-
-### Build with CMake
-```bash
 cmake ..
 cmake --build .
 ```
 
-### Run the Program 
+### Run the Application 
 #### On Linux
 ```bash
 ./BankingSystem
@@ -87,26 +80,27 @@ BankingSystem.exe
 | 3	     | Deposit Money |
 | 4	     | Withdraw Money |
 | 5	     | Funds Transfer |
-| 6	     | View Customer Info |
-| 7	     | Print Transaction History |
+| 6	     | View Customer Information |
+| 7	     | View Transaction History |
 | 8	     | Exit |
 
 ---
 
 ## 🧠 Design Overview
-**Core Structures**
+**Core Classes**
 
-**Customer** → Personal data & account creation
+**Customer** → Stores personal customer details and is responsible for account creation.
 
-**Account** → Balance management
+**Account** → Manages account number and balance-related operations.
 
-**Transaction** → Individual transaction records
+**Transaction** → Represents individual transactions, including amount, type, and timestamp.
 
-**BankAccount** → Aggregates customer, account, and transactions
+**Generated Struct**
+**BankAccount** → Combines customer data, account data, and transaction history into a single unit.
 
-## Storage
+## 🗄 Data Storage
 
-All data is stored in-memory using:
+All data is stored in memory during program execution using:
 ```bash
 std::unordered_map<long int, BankAccount> bankDatabase;
 ```
@@ -117,17 +111,17 @@ std::unordered_map<long int, BankAccount> bankDatabase;
 
 Each transaction stores:
 
-Unique ID
+Unique transaction ID
 
-Timestamp
+Date and time
 
-Description
+Transaction type (deposit / withdrawal / transfer)
 
-Amount
+Transaction amount
 
 Account balance after transaction
 
-*Transactions are stored per account, allowing accurate history retrieval.*
+*This ensures transparent and accurate transaction history for every account.*
 
 ---
 
@@ -136,26 +130,26 @@ Account balance after transaction
 
 Data is not persisted (resets on program exit)
 
-No authentication (PIN / password)
+No user authentication (PIN / password)
 
-No concurrency support
+No concurrency or multi-user support
 
 ---
 
 
-## 🔮 Future Improvements
+## 🔮 Possible Improvements
 
 File-based or database persistence
 
-PIN-based authentication
+PIN or password authentication
 
-Interest calculation
+Interest calculation on balances
 
-Admin dashboard
+Admin management features
 
-Unit tests
+Unit testing
 
-Transaction filtering (date / type)
+Transaction filtering by date or type
 
 ---
 
@@ -163,5 +157,5 @@ Transaction filtering (date / type)
 ## 👤 Author
 
 **Goodluck** <br>
-*C++ Developer & Systems Programming Enthusiast* <br>
-*An Intern at CodeAlpha*
+*C++ Intern at CodeAlpha* <br>
+*Systems & Backend Programming Enthusiast*

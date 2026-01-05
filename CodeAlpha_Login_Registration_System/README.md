@@ -2,7 +2,7 @@
 
 This project is a **console-based Login and Registration System** developed in **C++** as part of **CodeAlpha Task 2**.
 
-It demonstrates how user credentials can be securely registered, stored, and verified using basic backend programming principles.
+It demonstrates how user credentials can be securely registered, stored, and verified using basic C++ programming principles / concepts.
 
 ---
 
@@ -38,7 +38,7 @@ The goal of this task was to:
 - **Language:** C++ (C++17)
 - **Database:** SQLite3
 - **Build System:** CMake
-- **Platform:** Linux / Windows / macOS
+- **Platform:** Linux / Windows
 
 ---
 
