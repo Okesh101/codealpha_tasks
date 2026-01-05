@@ -1,30 +1,35 @@
-# 🔐 Console Authentication System (C++)
+# 🔐 Login and Registration System (C++)
 
-A simple **console-based authentication system** built with **modern C++**, designed to demonstrate real-world concepts such as:
+This project is a **console-based Login and Registration System** developed in **C++** as part of **CodeAlpha Task 2**.
 
-- Secure user registration & login
-- SQLite database integration
-- Password hashing
-- Input validation
-- Error handling
-- Modular program structure
-
-This project is suitable for **learning**, **practice**, and **portfolio demonstration**, especially for developers exploring **systems programming and backend fundamentals in C++**.
+It demonstrates how user credentials can be securely registered, stored, and verified using basic backend programming principles.
 
 ---
 
-## 🚀 Features
+## 📌 Task Objective (CodeAlpha – Task 2)
 
-✔ User registration  
-✔ Secure password hashing  
-✔ User login authentication  
-✔ SQLite database persistence  
-✔ Automatic database & table creation  
-✔ Username uniqueness validation  
-✔ Strong password enforcement  
-✔ Robust input validation  
-✔ Clear and descriptive error messages  
-✔ Continuous user interaction flow  
+The goal of this task was to:
+
+- Create a **registration function** that accepts a username and password
+- **Validate inputs** and prevent duplicate usernames
+- **Store credentials securely** in a file or database
+- Implement a **login system** that verifies user identity
+- Display **clear success and error messages**
+
+✔ All the above requirements have been implemented in this project.
+
+---
+
+## 🚀 Features Implemented
+
+✔ User registration with username and password  
+✔ Validation to prevent duplicate usernames  
+✔ Strong password validation rules  
+✔ Secure password storage using hashing  
+✔ SQLite database for persistent storage  
+✔ User login with credential verification  
+✔ Clear success and error feedback  
+✔ Continuous console interaction  
 
 ---
 
@@ -33,8 +38,7 @@ This project is suitable for **learning**, **practice**, and **portfolio demonst
 - **Language:** C++ (C++17)
 - **Database:** SQLite3
 - **Build System:** CMake
-- **Compiler:** GCC / Clang
-- **Platform:** Linux / macOS / Windows (with MinGW)
+- **Platform:** Linux / Windows / macOS
 
 ---
 
@@ -47,19 +51,15 @@ cd codealpha_tasks
 cd CodeAlpha_Login_Registration_System
 ```
 
-### Create Build Directory
+### Build the Project
 ```bash
 mkdir build
 cd build
-```
-
-### Build with CMake
-```bash
 cmake ..
 cmake --build .
 ```
 
-### Run the Program 
+### Run the Application
 #### On Linux
 ```bash
 ./AuthenticationSystem
@@ -77,24 +77,9 @@ AuthenticationSystem.exe
 | 2	     | Login with existing credentials |
 | 3	     | Exit the program |
 
+*After each operation, the user is asked whether to continue or exit.*
+
 ---
-
-## 🧠 Design Overview
-### Core Responsibilities
-
-#### Input Utilities
-Handles safe and validated user input using `getline` and exception handling.
-
-#### Security Layer
-Passwords are hashed using `std::hash` before storage to avoid plain-text credentials.
-
-#### Database Layer
-Uses SQLite3 for persistent storage
-Automatically creates the database directory and users table
-Prepared statements prevent SQL injection
-
-#### UI Layer ####
-Clearly structured prompts and user-friendly messages guide the user through each operation.
 
 ### 🗄 Data Storage
 
@@ -108,7 +93,7 @@ ID INTEGER PRIMARY KEY AUTOINCREMENT
 USERNAME TEXT UNIQUE NOT NULL
 PASSWORDHASH TEXT NOT NULL
 ```
-This ensures that data remains available across program restarts.
+Passwords are never stored in plain text.
 
 ---
 
@@ -124,45 +109,23 @@ At least **one lowercase letter**
 
 At least **one digit**
 
-*Weak passwords are rejected with clear guidance.*
+*Weak passwords are rejected with descriptive error messages.*
 
 ---
 
 
-## ⚠️ Limitations
+## ⚠️ Notes & Limitations
 
-Uses `std::hash` (not suitable for production-grade security)
+Uses `std::hash` for password hashing (educational purposes)
 
-No password recovery mechanism
+No password recovery feature
 
-No account lockout after repeated failures
-
-Single-user console interaction only
+Designed for single-user console interaction
 
 ---
-
-
-## 🔮 Future Improvements
-
-Replace `std::hash` with bcrypt / Argon2
-
-Password reset functionality
-
-Account lockout on multiple failed logins
-
-Role-based access (admin / user)
-
-Logging system
-
-Unit and integration tests
-
-Separation into multiple source files
-
----
-
 
 ## 👤 Author
 
 **Goodluck** <br>
-*C++ Developer & Systems Programming Enthusiast* <br>
-*An Intern at CodeAlpha*
+*C++ Intern at CodeAlpha* <br>
+*Systems & Backend Programming Enthusiast*
