@@ -80,15 +80,15 @@ AuthenticationSystem.exe
 ---
 
 ## 🧠 Design Overview
-### Core Responsibilities ###
+### Core Responsibilities
 
-#### Input Utilities ####
+#### Input Utilities
 Handles safe and validated user input using `getline` and exception handling.
 
-#### Security Layer ####
+#### Security Layer
 Passwords are hashed using `std::hash` before storage to avoid plain-text credentials.
 
-#### Database Layer ####
+#### Database Layer
 Uses SQLite3 for persistent storage
 Automatically creates the database directory and users table
 Prepared statements prevent SQL injection
@@ -96,7 +96,7 @@ Prepared statements prevent SQL injection
 #### UI Layer ####
 Clearly structured prompts and user-friendly messages guide the user through each operation.
 
-## 🗄 Data Storage
+### 🗄 Data Storage
 
 All user data is persisted using **SQLite**: <br>
 Database File: `data/users.db` <br>
