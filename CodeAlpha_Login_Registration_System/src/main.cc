@@ -2,323 +2,289 @@
 #include <fstream>
 #include <functional>
 #include <sqlite3.h>
+#include <algorithm>
+#include <cctype>
+#include <filesystem>
 
-// UTILITY FUNCTIONS
-int getInt(std::string message)
+using namespace std;
+
+// ===================== CONSTANTS =====================
+const string DB_DIR = "data";
+const string DB_NAME = "data/users.db";
+const string TABLE = "USERS";
+
+// ===================== INPUT UTILITIES =====================
+int getInt(const string &message)
 {
     while (true)
     {
-        std::cout << message;
-        std::string option;
-        getline(std::cin, option);
+        cout << message;
+        string input;
+        getline(cin, input);
 
         try
         {
-            return stoi(option);
+            return stoi(input);
         }
         catch (...)
         {
-            std::cout << "\nInvalid Input! Try again.";
+            cout << "\n[Input Error] Please enter a valid number.\n";
         }
     }
 }
 
-std::string hashPassword(std::string &password)
+string getString(const string &message)
 {
-    std::hash<std::string> hasher;
-    return std::to_string(hasher(password));
+    cout << message;
+    string input;
+    getline(cin, input);
+    return input;
 }
 
-std::string createUsersTable(const std::string &tableName, const std::string &dbName)
+// ===================== SECURITY =====================
+string hashPassword(const string &password)
 {
-    sqlite3 *db;
-    char *errMsg = 0;
-    int rc = sqlite3_open(dbName.c_str(), &db);
+    hash<string> hasher;
+    return to_string(hasher(password));
+}
 
-    if (rc)
+// ===================== FILESYSTEM =====================
+void ensureDatabaseDirectory()
+{
+    if (!filesystem::exists(DB_DIR))
     {
-        return "Can't open database: " + std::string(sqlite3_errmsg(db));
-    }
-
-    std::string sql = "CREATE TABLE IF NOT EXISTS " + tableName + " ("
-                                                                  "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                                                                  "USERNAME TEXT NOT NULL UNIQUE,"
-                                                                  "PASSWORDHASH TEXT NOT NULL);";
-
-    rc = sqlite3_exec(db, sql.c_str(), 0, 0, &errMsg);
-
-    if (rc != SQLITE_OK)
-    {
-        std::string errorMsg = "SQL error in creating table: " + std::string(errMsg);
-        sqlite3_free(errMsg);
-        sqlite3_close(db);
-        return errorMsg;
-    }
-    else
-    {
-        sqlite3_close(db);
-        // std::cout << "Table '" << tableName << "' created successfully" << std::endl;
-        return "success";
+        filesystem::create_directory(DB_DIR);
     }
 }
 
-std::string addUser(const std::string &dbName, const std::string &tableName, const std::string &username, const std::string &passwordHash)
+// ===================== DATABASE CORE =====================
+bool openDatabase(sqlite3 *&db, string &error)
 {
-    sqlite3 *db;
-    char *errMsg = 0;
-    int rc = sqlite3_open(dbName.c_str(), &db);
+    ensureDatabaseDirectory();
 
-    if (rc)
+    if (sqlite3_open(DB_NAME.c_str(), &db) != SQLITE_OK)
     {
-        return "Can't open database: " + std::string(sqlite3_errmsg(db));
+        error = sqlite3_errmsg(db);
+        return false;
     }
-
-    std::string sql = "INSERT INTO " + tableName + " (USERNAME, PASSWORDHASH) VALUES ('" + username + "', '" + passwordHash + "');";
-
-    rc = sqlite3_exec(db, sql.c_str(), 0, 0, &errMsg);
-
-    if (rc != SQLITE_OK)
-    {
-        std::string errorMsg = "SQL error in adding user details: " + std::string(errMsg);
-        sqlite3_free(errMsg);
-        sqlite3_close(db);
-        return errorMsg;
-    }
-    else
-    {
-        sqlite3_close(db);
-        return "success";
-    }
+    return true;
 }
 
-bool validateUsername(std::string username, std::string tableName = "USERS")
+string createUsersTable()
 {
-    bool userExists = false;
-    std::string dbName = "data/users.db";
     sqlite3 *db;
-    char *errMsg = 0;
-    int rc = sqlite3_open(dbName.c_str(), &db);
-    if (rc)
-    {
-        std::cout << "\nCan't open database: " << sqlite3_errmsg(db) << std::endl;
-        return userExists;
-    }
-    std::string sql = "SELECT USERNAME FROM " + tableName + " WHERE USERNAME = '" + username + "';";
+    char *errMsg = nullptr;
+    string error;
 
-    rc = sqlite3_exec(db, sql.c_str(), 0, 0, &errMsg);
+    if (!openDatabase(db, error))
+        return "Database open failed: " + error;
 
-    if (rc != SQLITE_OK)
+    string sql =
+        "CREATE TABLE IF NOT EXISTS USERS ("
+        "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "USERNAME TEXT UNIQUE NOT NULL,"
+        "PASSWORDHASH TEXT NOT NULL);";
+
+    if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK)
     {
-        // userExists = true;
-        // std::cout << "\nSQL error in validating username: " << errMsg << std::endl;
+        string err = errMsg;
         sqlite3_free(errMsg);
         sqlite3_close(db);
-        return userExists;
-    }
-    if (rc == SQLITE_ROW)
-    {
-        userExists = true;
-        // std::cout << "\nUsername already exists. Please choose a different username." << std::endl;
-    }
-    else
-    {
-        userExists = false;
+        return "Table creation failed: " + err;
     }
 
     sqlite3_close(db);
-    return userExists;
+    return "success";
 }
 
-std::string retrieveUserCredentials(const std::string dbName, const std::string tableName, const std::string username)
+bool validateUsername(const string &username)
 {
     sqlite3 *db;
-    char *errMsg = 0;
-    std::string passwordHash;
-    int rc = sqlite3_open(dbName.c_str(), &db);
-
-    if (rc)
-    {
-        return "Can't open database: " + std::string(sqlite3_errmsg(db));
-    }
-
-    std::string sql = "SELECT PASSWORDHASH FROM " + tableName + " WHERE USERNAME = '" + username + "';";
-
     sqlite3_stmt *stmt;
-    rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
-    if (rc != SQLITE_OK)
-    {
-        sqlite3_close(db);
-        return "Failed to execute statement: " + std::string(sqlite3_errmsg(db));
-    }
+    string error;
 
-    rc = sqlite3_step(stmt);
-    if (rc == SQLITE_ROW)
+    if (!openDatabase(db, error))
+        return false;
+
+    string sql = "SELECT 1 FROM USERS WHERE USERNAME = ?;";
+    sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+
+    bool exists = (sqlite3_step(stmt) == SQLITE_ROW);
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+    return exists;
+}
+
+string addUser(const string &username, const string &passwordHash)
+{
+    sqlite3 *db;
+    sqlite3_stmt *stmt;
+    string error;
+
+    if (!openDatabase(db, error))
+        return "Database open failed: " + error;
+
+    string sql =
+        "INSERT INTO USERS (USERNAME, PASSWORDHASH) VALUES (?, ?);";
+
+    sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, passwordHash.c_str(), -1, SQLITE_STATIC);
+
+    if (sqlite3_step(stmt) != SQLITE_DONE)
     {
-        passwordHash = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
-    }
-    else
-    {
-        passwordHash = "";
+        string err = sqlite3_errmsg(db);
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+
+        return "Registration failed: " + err +
+               "\nPossible reasons:\n"
+               "- Username already exists\n"
+               "- Database file is locked\n"
+               "- Insufficient file permissions";
     }
 
     sqlite3_finalize(stmt);
     sqlite3_close(db);
-    return passwordHash;
+    return "success";
 }
 
-// MAIN FUNCTONS
-std::string registerUser(std::string &username, std::string &password)
+string retrieveUserCredentials(const string &username)
 {
-    const std::string dbName = "data/users.db";
-    const std::string tableName = "USERS";
+    sqlite3 *db;
+    sqlite3_stmt *stmt;
+    string error;
 
-    std::string tableCreationStatus = createUsersTable(tableName, dbName);
-    if (tableCreationStatus != "success")
+    if (!openDatabase(db, error))
+        return "";
+
+    string sql =
+        "SELECT PASSWORDHASH FROM USERS WHERE USERNAME = ?;";
+
+    sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+
+    string hash = "";
+    if (sqlite3_step(stmt) == SQLITE_ROW)
     {
-        return tableCreationStatus;
+        hash = reinterpret_cast<const char *>(
+            sqlite3_column_text(stmt, 0));
     }
 
-    std::string passwordHash = hashPassword(password);
-    std::string addUserStatus = addUser(dbName, tableName, username, passwordHash);
-    if (addUserStatus != "success")
-    {
-        if (addUserStatus.find("UNIQUE constraint failed") != std::string::npos)
-        {
-            return "Username already exists. Please choose a different username.";
-        }
-        return addUserStatus;
-    }
-    std::cout << "\nUser details added successfully" << std::endl;
-    // saveFile(username, password);
-    return "Registration successful!";
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+    return hash;
 }
 
-std::string loginUser(std::string &username, std::string &password)
+// ===================== MAIN FUNCTIONS =====================
+string registerUser(string &username, string &password)
 {
-    std::string dbName = "data/users.db";
-    std::string tableName = "USERS";
-    std::string storedPasswordHash = retrieveUserCredentials(dbName, tableName, username);
-    if (storedPasswordHash.find("Error") != std::string::npos || storedPasswordHash.empty())
-    {
-        return "Invalid credentials.";
-    } else {
-        std::string inputPasswordHash = hashPassword(password);
-        if (inputPasswordHash == storedPasswordHash)
-        {
-            // std::string userData = readFile(username);
-            return "\nLogin successful!";
-        }
-        else
-        {
-            return "\nInvalid credentials.";
-        }
-    }
+    string tableStatus = createUsersTable();
+    if (tableStatus != "success")
+        return "[System Error] " + tableStatus;
+
+    if (validateUsername(username))
+        return "[Validation Error] Username already exists. Please choose another.";
+
+    string result = addUser(username, hashPassword(password));
+    if (result != "success")
+        return result;
+
+    return "Registration successful! You can now log in.";
 }
 
-// CASE FUNCTIONS
+string loginUser(string &username, string &password)
+{
+    string storedHash = retrieveUserCredentials(username);
+
+    if (storedHash.empty())
+        return "[Login Failed] Username not found.";
+
+    if (hashPassword(password) != storedHash)
+        return "[Login Failed] Incorrect password.";
+
+    return "Login successful! Welcome back.";
+}
+
+// ===================== UI OPERATIONS =====================
 void Register()
 {
-    std::string username;
-    std::string password;
+    cout << "\n--- USER REGISTRATION ---\n";
 
-    std::cout << "\n--- Register ---" << std::endl;
-    std::cout << "Enter username: ";
-    getline(std::cin, username);
+    string username = getString("Enter username: ");
+    string password;
 
     while (true)
     {
-        if (validateUsername(username))
-        {
-            std::cout << "\nUsername already exists. Please choose a different username." << std::endl;
-        }
-        std::cout << "\nEnter password: ";
-        getline(std::cin, password);
+        password = getString("Enter password: ");
 
-        if (password.length() < 8)
+        if (password.length() < 8 ||
+            !any_of(password.begin(), password.end(), ::isdigit) ||
+            !any_of(password.begin(), password.end(), ::isupper) ||
+            !any_of(password.begin(), password.end(), ::islower))
         {
-            std::cout << "\nPassword must be at least 8 characters long.";
-            continue;
-        }
-        if (!std::any_of(password.begin(), password.end(), ::isdigit))
-        {
-            std::cout << "\nPassword must contain at least one number.";
-            continue;
-        }
-        if (!std::any_of(password.begin(), password.end(), ::isupper))
-        {
-            std::cout << "\nPassword must contain at least one uppercase letter.";
-            continue;
-        }
-        if (!std::any_of(password.begin(), password.end(), ::islower))
-        {
-            std::cout << "\nPassword must contain at least one lowercase letter.";
+            cout << "\n[Password Weak]\n"
+                 << "- Minimum 8 characters\n"
+                 << "- At least one uppercase letter\n"
+                 << "- At least one lowercase letter\n"
+                 << "- At least one number\n\n";
             continue;
         }
         break;
     }
-    std::cout << registerUser(username, password) << std::endl;
+
+    cout << "\n"
+         << registerUser(username, password) << endl;
 }
 
 void Login()
 {
-    std::string username;
-    std::string password;
+    cout << "\n--- USER LOGIN ---\n";
 
-    std::cout << "\n--- Login ---" << std::endl;
-    std::cout << "Enter username: ";
-    getline(std::cin, username);
-    std::cout << "\nEnter password: ";
-    getline(std::cin, password);
+    string username = getString("Username: ");
+    string password = getString("Password: ");
 
-    std::cout << loginUser(username, password) << std::endl;
+    cout << "\n"
+         << loginUser(username, password) << endl;
 }
 
-// ENTRY CODE
+// ===================== MAIN =====================
 int main()
 {
+    cout << "Welcome to this Login & Registration System\n";
+
     while (true)
     {
-        std::cout << "Welcome to this Login & Registration System" << std::endl;
-        std::cout << "What can we do for you? "
-                  << "\n1. Register"
-                  << "\n2. Login"
-                  << "\n3. Exit" << std::endl;
-        int choice = getInt("\nYour option(1-3): ");
-        switch (choice)
-        {
-        case 1:
+        cout << "\nWhat would you like to do?\n"
+             << "1. Register\n"
+             << "2. Login\n"
+             << "3. Exit\n";
+
+        int choice = getInt("Your option (1-3): ");
+
+        if (choice == 1)
             Register();
-            break;
-        case 2:
+        else if (choice == 2)
             Login();
-            break;
-        case 3:
-            std::cout << "\nThank you for using this console app. Exiting..." << std::endl;
-            break;
-        default:
-            break;
-        }
-
-        std::cout << "\nDo you wish to perform another operation? (y/n): ";
-        std::string choiceStr;
-        getline(std::cin, choiceStr);
-
-        if (std::tolower(choiceStr[0]) == 'y')
+        else if (choice == 3)
         {
-            std::cout << "" << std::endl;
-            continue;
-        }
-        else if (std::tolower(choiceStr[0]) == 'n')
-        {
-            std::cout << "\nThank you for using this console app. Exiting..." << std::endl;
+            cout << "\nThank you for using the system. Goodbye!\n";
             break;
         }
         else
         {
-            std::cout << "\nInvalid option" << std::endl;
+            cout << "\n[Input Error] Invalid menu option.\n";
+        }
+
+        string cont = getString(
+            "\nDo you want to perform another operation? (y/n): ");
+
+        if (cont != "y" && cont != "Y")
+        {
+            cout << "\nSession ended. Stay safe!\n";
             break;
         }
     }
-
-    return 0;
 }
