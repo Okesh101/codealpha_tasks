@@ -61,13 +61,13 @@ cmake ..
 cmake --build .
 ```
 
-### Run the Application 
-#### On Linux
+#### Run the Application 
+##### On Linux
 ```bash
 ./BankingSystem
 ```
 
-#### On Windows
+##### On Windows
 ```bash
 BankingSystem.exe
 ```
@@ -87,7 +87,7 @@ BankingSystem.exe
 ---
 
 ## 🧠 Design Overview
-**Core Classes**
+### Core Classes ###
 
 **Customer** → Stores personal customer details and is responsible for account creation.
 
@@ -95,7 +95,8 @@ BankingSystem.exe
 
 **Transaction** → Represents individual transactions, including amount, type, and timestamp.
 
-**Generated Struct** <br>
+### Generated Struct ### <br>
+
 **BankAccount** → Combines customer data, account data, and transaction history into a single unit.
 
 ## 🗄 Data Storage
