@@ -95,7 +95,7 @@ BankingSystem.exe
 
 **Transaction** → Represents individual transactions, including amount, type, and timestamp.
 
-### Generated Struct ### <br>
+### Generated Struct <br>
 
 **BankAccount** → Combines customer data, account data, and transaction history into a single unit.
 
