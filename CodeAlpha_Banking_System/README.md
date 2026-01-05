@@ -53,7 +53,7 @@ cd codealpha_tasks
 cd CodeAlpha_Banking_System
 ```
 
-### Build the Project
+#### Build the Project
 ```bash
 mkdir build
 cd build
@@ -95,13 +95,13 @@ BankingSystem.exe
 
 **Transaction** → Represents individual transactions, including amount, type, and timestamp.
 
-**Generated Struct**
+**Generated Struct** <br>
 **BankAccount** → Combines customer data, account data, and transaction history into a single unit.
 
 ## 🗄 Data Storage
 
 All data is stored in memory during program execution using:
-```bash
+```cpp
 std::unordered_map<long int, BankAccount> bankDatabase;
 ```
 
