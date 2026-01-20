@@ -23,7 +23,7 @@ struct CustomerDetails
 {
     std::string name;
     int age;
-    long int NIN;
+    long long NIN;
     int accountNumber;
 };
 
@@ -35,7 +35,7 @@ private:
     std::unordered_set<int> accNumberSet;
     std::string firstname, surname;
     int age;
-    long int NIN;
+    long long NIN;
 
 public:
     void setFirstname(std::string firstname)
@@ -50,7 +50,7 @@ public:
     {
         this->age = age;
     }
-    void setNIN(long int nin)
+    void setNIN(long long nin)
     {
         this->NIN = nin;
     }
@@ -63,7 +63,7 @@ public:
     {
         return this->age;
     }
-    long int retrieveNIN()
+    long long retrieveNIN()
     {
         return this->NIN;
     }
@@ -177,7 +177,7 @@ int getInt(const std::string &prompt)
     }
 }
 
-long int getLong(const std::string &prompt)
+long long getLong(const std::string &prompt)
 {
     while (true)
     {
@@ -210,6 +210,36 @@ std::string getCurrentDateTime()
     return oss.str();
 }
 
+bool performOperation()
+{
+    std::cout << "\n-------------------------------------\n";
+    std::cout << "Do you wish to perform another operation? (y/n)\n";
+    std::cout << "Your option: ";
+    std::string choiceChar;
+    getline(std::cin, choiceChar);
+    if (choiceChar == "y" || choiceChar == "Y")
+    {
+        return true;
+    }
+    else if (choiceChar == "n" || choiceChar == "N")
+    {
+        std::cout << "\nThank you for using this Banking System. Exiting...\n"
+                  << std::endl;
+        ;
+        return false;
+    }
+    else
+    {
+        std::cout << "\nInvalid choice!" << std::endl;
+        return false;
+    }
+}
+
+bool isNINValid(long long nin)
+{
+    return (nin >= 10000000000LL && nin <= 99999999999LL);
+}
+
 // SWITCH FUNCTIONS
 void CreateAccount()
 {
@@ -218,10 +248,10 @@ void CreateAccount()
 
     std::string surname, firstname;
     int age = 0;
-    long int NIN;
+    long long NIN = 1000000001;
     std::cout << "\n\nYou are welcome to this banking system!"
-                << "\nKindly provide us with some of your details"
-                << "\n\nEnter your last name (surname): ";
+              << "\nKindly provide us with some of your details"
+              << "\n\nEnter your last name (surname): ";
     getline(std::cin, surname);
     std::cout << "\nEnter your first name: ";
     getline(std::cin, firstname);
@@ -233,7 +263,17 @@ void CreateAccount()
             std::cout << "I'm sorry, you are not allowed to create an account yet." << std::endl;
         }
     }
-    NIN = getLong("\nEnter your NIN no: ");
+    // while (isNINValid(NIN))
+    // {
+    do
+    {
+        NIN = getLong("\nEnter your NIN no: ");
+        if (!isNINValid(NIN))
+        {
+            std::cout << "Inavlid NIN. NIN must be exactly 11 digits." << std::endl;
+        }
+    } while (!isNINValid(NIN));
+    std::cout << "NIN accepted: " << NIN << std::endl;
 
     // Setting customer details
     customer.setSurname(surname);
@@ -275,7 +315,8 @@ void BalanceEnquiry()
     std::cout << "\nAccount Balance: " << bankAcc.account.getAccBalance() << std::endl;
 }
 
-void DepositFund() {
+void DepositFund()
+{
     long int accNumber = getLong("\nEnter account number: ");
 
     if (!accountExists(accNumber))
@@ -285,11 +326,11 @@ void DepositFund() {
     }
 
     float depositAmount = getLong("\nEnter amount to deposit: ");
-    
+
     BankAccount &bankAcc = bankDatabase[accNumber];
     float currentBalance = bankAcc.account.getAccBalance();
     bankAcc.account.setAccBalance(currentBalance + depositAmount);
-    
+
     int newTransactionId = bankAcc.transactions.size() + 1;
     Transaction transaction;
     transaction.setTransaction(newTransactionId, getCurrentDateTime(), "Deposit", depositAmount, currentBalance + depositAmount);
@@ -418,65 +459,89 @@ int main()
 {
     while (true)
     {
-        std::cout << "\n\nWelcome to the Banking System!" << std::endl;
-        std::cout << "What will you like to do today? "
-                    << "\n1. Create Account"
-                    << "\n2. View Balance"
-                    << "\n3. Deposit Money"
-                    << "\n4. Withdraw Money"
-                    << "\n5. Funds Transfer"
-                    << "\n6. View Customer Info"
-                    << "\n7. Print Transaction History" 
-                    << "\n8. Exit" << std::endl;
+        std::cout << "\n=====================================\n";
+        std::cout << "      WELCOME TO THE BANKING SYSTEM   \n";
+        std::cout << "=====================================\n";
+        std::cout << "Please select an operation below:\n\n";
 
-        int choice = getInt("\n\n Your option (1-8): ");
+        std::cout << "  1. Create Account\n";
+        std::cout << "  2. View Balance\n";
+        std::cout << "  3. Deposit Money\n";
+        std::cout << "  4. Withdraw Money\n";
+        std::cout << "  5. Funds Transfer\n";
+        std::cout << "  6. View Customer Info\n";
+        std::cout << "  7. Print Transaction History\n";
+        std::cout << "  8. Exit\n";
 
-        switch (choice)
+        int choice = getInt("\nEnter your option (1–8): ");
+
+        if (choice == 1)
         {
-        case 1:
             CreateAccount();
+            if (performOperation())
+                continue;
             break;
-        case 2:
-            BalanceEnquiry();
-            break;
-        case 3:
-            DepositFund();
-            break;
-        case 4:
-            Withdrawal();
-            break;
-        case 5:
-            Transfer();
-            break;
-        case 6:
-            CustomerInfo();
-            break;
-        case 7:
-            TransactionHistory();
-            break;
-        case 8:
-            std::cout << "\nThank you for using this Banking System. Exiting..." << std::endl;
-            break;
-        default:
-            std::cout << "\nInput entered is not part of the options! \nTry again." << std::endl;
-            continue;
-            // break;
         }
 
-        std::cout << "\nDo you wish to perform another operation? (y/n)" << std::endl;
-        std::cout << "Your option (y/n): ";
-        std::string choiceChar;
-        getline(std::cin, choiceChar);
-
-        if (choiceChar == "y")
+        else if (choice == 2)
         {
-            continue;
+            BalanceEnquiry();
+            if (performOperation())
+                continue;
+            break;
         }
+
+        else if (choice == 3)
+        {
+            DepositFund();
+            if (performOperation())
+                continue;
+            break;
+        }
+
+        else if (choice == 4)
+        {
+            Withdrawal();
+            if (performOperation())
+                continue;
+            break;
+        }
+
+        else if (choice == 5)
+        {
+            Transfer();
+            if (performOperation())
+                continue;
+            break;
+        }
+
+        else if (choice == 6)
+        {
+            CustomerInfo();
+            if (performOperation())
+                continue;
+            break;
+        }
+
+        else if (choice == 7)
+        {
+            TransactionHistory();
+            if (performOperation())
+                continue;
+            break;
+        }
+
+        else if (choice == 8)
+        {
+            std::cout << "\nThank you for using this Banking System. Exiting...\n";
+            break;
+        }
+
         else
         {
-            break;
+            std::cout << "\nInvalid option! Please try again.\n";
+            continue;
         }
     }
-
     return 0;
 }
