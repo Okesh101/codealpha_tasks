@@ -1,6 +1,6 @@
-# 🚀 CodeAlpha C++ Internship Projects
+![CodeAlpha Logo](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDUJ4bm5p1jeqH0dyOXgsDxZnL5uOAMI5RyQ&s)
 
-![CodeAlpha Logo](https://media.licdn.com/dms/image/v2/C4D0BAQFVBPbc6-yxoA/company-logo_200_200/company-logo_200_200/0/1677167041761?e=2147483647&v=beta&t=xBxH4zLgiEO1RCPbZemcdWDMIZFXROtM2c11jjdQHus)
+# 🚀 CodeAlpha C++ Internship Projects
 
 This repository contains **three complete C++ console applications** developed as part of the **CodeAlpha C++ Internship Program**.
 
